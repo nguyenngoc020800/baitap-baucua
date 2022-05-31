@@ -15,14 +15,14 @@ const initialState = {
 const baucuaReducer = (state = initialState, action) => {
   switch (action.type) {
     case "tang_cuoc":
-      state.tongdiem -= 100;
+      // const tongdiem = state.tongdiem - 100
       const danhSachCuoc = state.danhSachCuoc.map((item) => {
         if (item.loai === action.data) {
           return { ...item, diemCuoc: item.diemCuoc + 100 };
         }
         return item;
       });
-      return { ...state, danhSachCuoc };
+      return { ...state, danhSachCuoc, tongdiem: state.tongdiem - 100 };
     case "giam_cuoc":
       state.tongdiem += 100;
       const danhSachCuoc2 = state.danhSachCuoc.map((item) => {
@@ -54,12 +54,12 @@ const baucuaReducer = (state = initialState, action) => {
         }, 0);
         console.log("diem hoan", diemThuong);
         diemThuong += newXucXac.reduce((result = 0, item) => {
-          for (let i = 0; i < danhSachTrungCuoc.length; i++) {
-            if (item === danhSachTrungCuoc[i].loai) {
-              return (result += danhSachTrungCuoc[i].diemCuoc);
-            }
-            return result;
+          const found = danhSachTrungCuoc.find((item2) => item2.loai === item);
+          console.log("found", found);
+          if (found) {
+            return (result += found.diemCuoc);
           }
+          return result;
         }, 0);
       }
 
